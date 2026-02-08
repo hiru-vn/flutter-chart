@@ -12,7 +12,8 @@ class LargeScreenCrosshairLinePainter extends CrosshairLinePainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final lineColor = theme.crosshairLineDesktopColor;
+    final Color lineColor = theme.crosshairBarrierStyle?.lineColor ??
+        theme.crosshairLineDesktopColor;
     // Paint the horizontal dashed line and make it occupy the entire width of the screen (-size.width, size.width).
     paintHorizontalDashedLine(
         canvas, -size.width, size.width, cursorY, lineColor, 1);

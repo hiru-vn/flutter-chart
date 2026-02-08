@@ -771,6 +771,7 @@ class _InteractiveLayerGestureHandlerState
   }
 
   void _handleHover(PointerHoverEvent event, XAxisModel xAxis) {
+    print('Hover: ${event.localPosition}');
     final newMouseCursor = _getMouseCursor(event.localPosition, xAxis);
     if (_mouseCursor != newMouseCursor) {
       setState(() {
@@ -839,6 +840,11 @@ class _InteractiveLayerGestureHandlerState
 
     _updateInteractionMode(
         hitDrawing ? InteractionMode.drawingTool : InteractionMode.none);
+
+    if (!hitDrawing) {
+      widget.crosshairController.onTap(details);
+    }
+
     _interactionNotifier.notify();
   }
 

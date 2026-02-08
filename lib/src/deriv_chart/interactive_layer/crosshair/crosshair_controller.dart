@@ -249,6 +249,20 @@ class CrosshairController extends ValueNotifier<CrosshairState> {
     notifyListeners();
   }
 
+  /// Handles tap events to show crosshair on mobile platforms.
+  void onTap(TapUpDetails details) {
+    final double x = details.localPosition.dx;
+    final double y = details.localPosition.dy;
+    final int epoch = xAxisModel.epochFromX(x);
+    final Tick? tick = _findTickForCrosshair(epoch: epoch, y: y);
+
+    if (tick != null) {
+      _showCrosshair(tick, details.localPosition);
+    }
+
+    notifyListeners();
+  }
+
   /// Handles mouse exit events to hide crosshair when cursor leaves the chart.
   void onExit(PointerExitEvent event) {
     _hideCrosshair();

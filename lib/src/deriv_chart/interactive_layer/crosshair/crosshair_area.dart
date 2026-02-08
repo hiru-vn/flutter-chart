@@ -177,7 +177,8 @@ class CrosshairArea extends StatelessWidget {
           _buildCrosshairTickHightlight(
               constraints: constraints, xAxis: xAxis, theme: theme, tick: tick),
         // Add crosshair quote label at the right side of the chart
-        if (crosshairVariant != CrosshairVariant.smallScreen &&
+        if ((crosshairVariant != CrosshairVariant.smallScreen ||
+                theme.crosshairBarrierStyle != null) &&
             cursorPosition.dy > 0)
           Positioned(
             top: cursorPosition.dy,
@@ -187,20 +188,24 @@ class CrosshairArea extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: theme.crosshairInformationBoxContainerNormalColor,
+                  color:
+                      theme.crosshairBarrierStyle?.labelShapeBackgroundColor ??
+                          theme.crosshairInformationBoxContainerNormalColor,
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
                   quoteFromCanvasY(cursorPosition.dy).toStringAsFixed(pipSize),
-                  style: theme.crosshairAxisLabelStyle.copyWith(
-                    color: theme.crosshairInformationBoxTextDefault,
-                  ),
+                  style: theme.crosshairBarrierStyle?.textStyle ??
+                      theme.crosshairAxisLabelStyle.copyWith(
+                        color: theme.crosshairInformationBoxTextDefault,
+                      ),
                 ),
               ),
             ),
           ),
         // Add vertical date label at the bottom of the chart
-        if (crosshairVariant != CrosshairVariant.smallScreen)
+        if (crosshairVariant != CrosshairVariant.smallScreen ||
+            theme.crosshairBarrierStyle != null)
           Positioned(
             bottom: 0,
             left: xAxis.xFromEpoch(tick.epoch),
@@ -210,14 +215,17 @@ class CrosshairArea extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
-                  color: theme.crosshairInformationBoxContainerNormalColor,
+                  color:
+                      theme.crosshairBarrierStyle?.labelShapeBackgroundColor ??
+                          theme.crosshairInformationBoxContainerNormalColor,
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
                   ChartDateUtils.formatDateTimeWithSeconds(tick.epoch),
-                  style: theme.crosshairAxisLabelStyle.copyWith(
-                    color: theme.crosshairInformationBoxTextDefault,
-                  ),
+                  style: theme.crosshairBarrierStyle?.textStyle ??
+                      theme.crosshairAxisLabelStyle.copyWith(
+                        color: theme.crosshairInformationBoxTextDefault,
+                      ),
                 ),
               ),
             ),

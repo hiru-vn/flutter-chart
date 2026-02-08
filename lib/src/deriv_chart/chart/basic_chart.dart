@@ -11,8 +11,8 @@ import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
-
 import '../../misc/callbacks.dart';
 import 'data_visualization/chart_series/series.dart';
 import 'data_visualization/models/animation_info.dart';
@@ -291,7 +291,9 @@ class BasicChartState<T extends BasicChart> extends State<T>
   void _quoteAnimationListener() {
     if (topBoundQuoteAnimationController.isCompleted &&
         bottomBoundQuoteAnimationController.isCompleted) {
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     }
   }
 

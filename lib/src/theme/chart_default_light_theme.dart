@@ -122,6 +122,9 @@ class ChartDefaultLightTheme extends ChartDefaultTheme {
       blinkingDotColor: currentSpotDotColor);
 
   @override
+  HorizontalBarrierStyle? get crosshairBarrierStyle => null;
+
+  @override
   TextStyle get overLine => TextStyles.overLine;
 
   @override

@@ -165,6 +165,9 @@ abstract class ChartTheme {
   /// The painting styles horizontal barriers.
   HorizontalBarrierStyle get horizontalBarrierStyle;
 
+  /// The painting styles of crosshair.
+  HorizontalBarrierStyle? get crosshairBarrierStyle;
+
   /// The painting styles vertical barriers.
   VerticalBarrierStyle get verticalBarrierStyle;
 

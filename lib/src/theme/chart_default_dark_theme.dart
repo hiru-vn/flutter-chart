@@ -112,6 +112,9 @@ class ChartDefaultDarkTheme extends ChartDefaultTheme {
       );
 
   @override
+  HorizontalBarrierStyle? get crosshairBarrierStyle => null;
+
+  @override
   HorizontalBarrierStyle get currentSpotStyle => HorizontalBarrierStyle(
       color: currentSpotContainerColor,
       textStyle: textStyle(
