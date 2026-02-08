@@ -85,4 +85,16 @@ class GapManager {
   /// Has O(log N) time complexity, where N is a number of time gaps.
   bool isInGap(int epoch) =>
       gaps.isNotEmpty && gaps[indexOfNearestGap(gaps, epoch)].contains(epoch);
+
+  /// Returns the end epoch of the gap if [epoch] falls into one.
+  int? getGapEnd(int epoch) {
+    if (gaps.isEmpty) {
+      return null;
+    }
+    final int index = indexOfNearestGap(gaps, epoch);
+    if (gaps[index].contains(epoch)) {
+      return gaps[index].rightEpoch;
+    }
+    return null;
+  }
 }

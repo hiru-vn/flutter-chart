@@ -620,6 +620,7 @@ class XAxisModel extends ChangeNotifier {
       _minDistanceBetweenTimeGridLines,
       pxBetween,
       _gapManager.isInGap,
+      getGapEnd: _gapManager.getGapEnd,
     );
   }
 }

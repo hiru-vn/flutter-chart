@@ -1,6 +1,10 @@
+import 'package:deriv_chart/src/deriv_chart/chart/x_axis/grid/time_label.dart';
+
 const Duration _week = Duration(days: DateTime.daysPerWeek);
 const Duration _day = Duration(days: 1);
 const Duration _month = Duration(days: 30);
+const Duration _quarter = Duration(days: 90);
+const Duration _year = Duration(days: 365);
 
 /// Creates a list of [DateTime] with gaps of [timeGridInterval].
 List<DateTime> gridTimestamps({
@@ -16,7 +20,15 @@ List<DateTime> gridTimestamps({
 
   while (t.compareTo(rightBoundTime) <= 0) {
     timestamps.add(t);
-    t = timeGridInterval == _month ? _addMonth(t) : t.add(timeGridInterval);
+    if (timeGridInterval == _month) {
+      t = _addMonth(t);
+    } else if (timeGridInterval == _quarter) {
+      t = _addQuarter(t);
+    } else if (timeGridInterval == _year) {
+      t = _addYear(t);
+    } else {
+      t = t.add(timeGridInterval);
+    }
   }
   return timestamps;
 }
@@ -24,6 +36,10 @@ List<DateTime> gridTimestamps({
 DateTime _gridEpochStart(Duration timeGridInterval, int leftBoundEpoch) {
   if (timeGridInterval == _month) {
     return _closestFutureMonthStart(leftBoundEpoch);
+  } else if (timeGridInterval == _quarter) {
+    return _closestFutureQuarterStart(leftBoundEpoch);
+  } else if (timeGridInterval == _year) {
+    return _closestFutureYearStart(leftBoundEpoch);
   } else if (timeGridInterval == _week) {
     final DateTime t = _closestFutureDayStart(leftBoundEpoch);
     final int daysUntilMonday = (8 - t.weekday) % 7;
@@ -51,7 +67,27 @@ DateTime _closestFutureMonthStart(int epoch) {
   return monthStart.isBefore(time) ? _addMonth(monthStart) : monthStart;
 }
 
+DateTime _closestFutureQuarterStart(int epoch) {
+  final DateTime time = DateTime.fromMillisecondsSinceEpoch(epoch, isUtc: true);
+
+  // Calculate start of current quarter
+  final int quarterMonth = ((time.month - 1) ~/ 3) * 3 + 1;
+  final DateTime quarterStart = DateTime.utc(time.year, quarterMonth);
+
+  return quarterStart.isBefore(time) ? _addQuarter(quarterStart) : quarterStart;
+}
+
+DateTime _closestFutureYearStart(int epoch) {
+  final DateTime time = DateTime.fromMillisecondsSinceEpoch(epoch, isUtc: true);
+  final DateTime yearStart = DateTime.utc(time.year);
+  return yearStart.isBefore(time) ? _addYear(yearStart) : yearStart;
+}
+
 DateTime _addMonth(DateTime time) => DateTime.utc(time.year, time.month + 1);
+
+DateTime _addQuarter(DateTime time) => DateTime.utc(time.year, time.month + 3);
+
+DateTime _addYear(DateTime time) => DateTime.utc(time.year + 1);
 
 /// Px width of duration in ms on time axis with current scale.
 /// Conversion callback dependency of [timeGridInterval].
@@ -87,6 +123,11 @@ Duration timeGridInterval(
     _month,
   ],
 }) {
+  // Check override
+  if (xAxisGranularity == XAxisGranularity.monthly) return _month;
+  if (xAxisGranularity == XAxisGranularity.quarterly) return _quarter;
+  if (xAxisGranularity == XAxisGranularity.yearly) return _year;
+
   bool hasEnoughDistanceBetweenLines(Duration interval) {
     final double distanceBetweenLines = pxFromMs(interval.inMilliseconds);
     return distanceBetweenLines >= minDistanceBetweenLines;
