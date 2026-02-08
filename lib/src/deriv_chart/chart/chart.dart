@@ -79,6 +79,7 @@ class Chart extends StatefulWidget {
     this.showScrollToLastTickButton,
     this.loadingAnimationColor,
     this.useDrawingToolsV2 = false,
+    this.disableAnimations = false,
     Key? key,
   }) : super(key: key);
 
@@ -201,6 +202,9 @@ class Chart extends StatefulWidget {
 
   /// The interactive layer behaviour.
   final InteractiveLayerBehaviour? interactiveLayerBehaviour;
+
+  /// Whether to disable animations.
+  final bool disableAnimations;
 
   @override
   State<StatefulWidget> createState() =>

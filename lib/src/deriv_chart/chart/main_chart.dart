@@ -62,6 +62,7 @@ class MainChart extends BasicChart {
     this.showCurrentTickBlinkAnimation = true,
     super.currentTickAnimationDuration,
     super.quoteBoundsAnimationDuration,
+    super.disableAnimations = false,
     double opacity = 1,
     ChartAxisConfig? chartAxisConfig,
     VisibleQuoteAreaChangedCallback? onQuoteAreaChanged,

@@ -35,6 +35,7 @@ class BasicChart extends StatefulWidget {
     this.onQuoteAreaChanged,
     this.currentTickAnimationDuration = _defaultDuration,
     this.quoteBoundsAnimationDuration = _defaultDuration,
+    this.disableAnimations = false,
   })  : chartAxisConfig = chartAxisConfig ?? const ChartAxisConfig(),
         super(key: key);
 
@@ -58,6 +59,9 @@ class BasicChart extends StatefulWidget {
 
   /// Duration of quote bounds animated transition.
   final Duration quoteBoundsAnimationDuration;
+
+  /// Whether to disable animations.
+  final bool disableAnimations;
 
   @override
   BasicChartState<BasicChart> createState() => BasicChartState<BasicChart>();
@@ -109,9 +113,21 @@ class BasicChartState<T extends BasicChart> extends State<T>
   /// The animation of the current tick.
   late Animation<double> currentTickAnimation;
 
-  double get _topBoundQuote => topBoundQuoteAnimationController.value;
+  /// Manual override for top bound when animations are disabled.
+  double? _manualTopBoundQuote;
 
-  double get _bottomBoundQuote => bottomBoundQuoteAnimationController.value;
+  /// Manual override for bottom bound when animations are disabled.
+  double? _manualBottomBoundQuote;
+
+  double get _topBoundQuote =>
+      (widget.disableAnimations && _manualTopBoundQuote != null)
+          ? _manualTopBoundQuote!
+          : topBoundQuoteAnimationController.value;
+
+  double get _bottomBoundQuote =>
+      (widget.disableAnimations && _manualBottomBoundQuote != null)
+          ? _manualBottomBoundQuote!
+          : bottomBoundQuoteAnimationController.value;
 
   /// Vertical padding in pixel.
   double get verticalPadding {
@@ -291,9 +307,11 @@ class BasicChartState<T extends BasicChart> extends State<T>
   void _quoteAnimationListener() {
     if (topBoundQuoteAnimationController.isCompleted &&
         bottomBoundQuoteAnimationController.isCompleted) {
-      if (mounted) {
-        setState(() {});
+      if (SchedulerBinding.instance.schedulerPhase ==
+          SchedulerPhase.persistentCallbacks) {
+        return;
       }
+      setState(() {});
     }
   }
 
@@ -326,17 +344,35 @@ class BasicChartState<T extends BasicChart> extends State<T>
 
     if (!minQuote.isNaN && minQuote != bottomBoundQuoteTarget) {
       bottomBoundQuoteTarget = minQuote;
-      bottomBoundQuoteAnimationController.animateTo(
-        bottomBoundQuoteTarget,
-        curve: Curves.easeOut,
-      );
+      if (widget.disableAnimations) {
+        _manualBottomBoundQuote = bottomBoundQuoteTarget;
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            bottomBoundQuoteAnimationController.value = bottomBoundQuoteTarget;
+          }
+        });
+      } else {
+        bottomBoundQuoteAnimationController.animateTo(
+          bottomBoundQuoteTarget,
+          curve: Curves.easeOut,
+        );
+      }
     }
     if (!maxQuote.isNaN && maxQuote != topBoundQuoteTarget) {
       topBoundQuoteTarget = maxQuote;
-      topBoundQuoteAnimationController.animateTo(
-        topBoundQuoteTarget,
-        curve: Curves.easeOut,
-      );
+      if (widget.disableAnimations) {
+        _manualTopBoundQuote = topBoundQuoteTarget;
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            topBoundQuoteAnimationController.value = topBoundQuoteTarget;
+          }
+        });
+      } else {
+        topBoundQuoteAnimationController.animateTo(
+          topBoundQuoteTarget,
+          curve: Curves.easeOut,
+        );
+      }
     }
   }
 
@@ -547,5 +583,7 @@ class BasicChartState<T extends BasicChart> extends State<T>
   void _setupInitialBounds() {
     topBoundQuoteTarget = widget.chartAxisConfig.initialTopBoundQuote;
     bottomBoundQuoteTarget = widget.chartAxisConfig.initialBottomBoundQuote;
+    _manualTopBoundQuote = topBoundQuoteTarget;
+    _manualBottomBoundQuote = bottomBoundQuoteTarget;
   }
 }
