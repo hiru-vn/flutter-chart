@@ -55,9 +55,25 @@ class YGridLabelPainter extends CustomPainter {
     for (final double quote in gridLineQuotes) {
       final double y = quoteToCanvasY(quote);
 
+      String text;
+
+      if (topBoundQuote > 1000) {
+        final double val = quote / 1000;
+        if (val % 1 == 0) {
+          text = val.toStringAsFixed(0);
+        } else {
+          // Show up to 2 decimals if needed, stripping trailing zeros
+          text = val
+              .toStringAsFixed(2)
+              .replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "");
+        }
+      } else {
+        text = quote.toStringAsFixed(pipSize);
+      }
+
       paintText(
         canvas,
-        text: quote.toStringAsFixed(pipSize),
+        text: text,
         style: style.yLabelStyle,
         anchor: Offset(size.width - style.labelHorizontalPadding, y),
         anchorAlignment: Alignment.centerRight,
