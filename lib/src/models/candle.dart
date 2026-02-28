@@ -12,9 +12,10 @@ class Candle extends Tick with EquatableMixin {
     required this.low,
     required this.open,
     required this.close,
+    double? volume,
     int? currentEpoch,
   })  : currentEpoch = currentEpoch ?? epoch,
-        super(epoch: epoch, quote: close);
+        super(epoch: epoch, quote: close, volume: volume);
 
   /// Initializes a candle class with only the given parameters or non given.
   const Candle.noParam(
@@ -23,6 +24,7 @@ class Candle extends Tick with EquatableMixin {
     double close,
     double high,
     double low, {
+    double? volume,
     int? currentEpoch,
   }) : this(
           epoch: epoch,
@@ -30,6 +32,7 @@ class Candle extends Tick with EquatableMixin {
           close: close,
           high: high,
           low: low,
+          volume: volume,
           currentEpoch: currentEpoch,
         );
 
@@ -60,6 +63,7 @@ class Candle extends Tick with EquatableMixin {
     double? low,
     double? open,
     double? close,
+    double? volume,
     int? currentEpoch,
   }) =>
       Candle(
@@ -68,14 +72,15 @@ class Candle extends Tick with EquatableMixin {
         low: low ?? this.low,
         open: open ?? this.open,
         close: close ?? this.close,
+        volume: volume ?? this.volume,
         currentEpoch: currentEpoch ?? this.currentEpoch,
       );
 
   @override
   String toString() =>
       'Candle(epoch: $epoch, high: $high, low: $low, open: $open, close: '
-      '$close, currentEpoch: $currentEpoch)';
+      '$close, volume: $volume, currentEpoch: $currentEpoch)';
 
   @override
-  List<Object> get props => <Object>[epoch, open, close, high, low];
+  List<Object?> get props => <Object?>[epoch, open, close, high, low, volume];
 }

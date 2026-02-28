@@ -1,15 +1,20 @@
 // ignore_for_file: unnecessary_null_comparison
 
+import 'package:deriv_chart/deriv_chart.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_data.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/chart_scale_model.dart';
 import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
+import 'package:deriv_chart/src/theme/painting_styles/candle_style.dart';
 import 'package:flutter/material.dart';
 
 import '../data_visualization/chart_series/line_series/line_series.dart';
 import '../data_visualization/chart_series/ohlc_series/candle/candle_series.dart';
 import '../data_visualization/chart_series/series.dart';
+import '../data_visualization/chart_series/data_series.dart';
+import '../../../models/tick.dart';
+import 'volume_painter.dart';
 
 /// A `CustomPainter` which paints the chart data inside the chart.
 class ChartDataPainter extends BaseChartDataPainter {
@@ -19,6 +24,7 @@ class ChartDataPainter extends BaseChartDataPainter {
     required ChartConfig chartConfig,
     required ChartTheme theme,
     required this.mainSeries,
+    required this.showVolume,
     required EpochToX epochToCanvasX,
     required QuoteToY quoteToCanvasY,
     required int rightBoundEpoch,
@@ -45,8 +51,31 @@ class ChartDataPainter extends BaseChartDataPainter {
   /// Chart's main data series.
   final Series mainSeries;
 
+  /// Whether to show volume
+  final bool showVolume;
+
   @override
   void paint(Canvas canvas, Size size) {
+    if (showVolume && mainSeries is DataSeries<Tick>) {
+      final DataSeries<Tick> dataSeries = mainSeries as DataSeries<Tick>;
+      if (dataSeries.visibleEntries.isNotEmpty) {
+        CandleStyle candleStyle = theme.candleStyle;
+        if (mainSeries.style is CandleStyle) {
+          candleStyle = mainSeries.style as CandleStyle;
+        }
+
+        VolumePainter.paint(
+          canvas,
+          size,
+          dataSeries.visibleEntries.entries.toList(),
+          epochToCanvasX,
+          candleStyle,
+          animationInfo,
+          chartConfig,
+        );
+      }
+    }
+
     mainSeries.paint(
       canvas,
       size,

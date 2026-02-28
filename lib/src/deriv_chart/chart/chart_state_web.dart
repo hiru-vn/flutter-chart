@@ -50,6 +50,7 @@ class _ChartStateWeb extends _ChartState {
             interactiveLayerBehaviour: widget.interactiveLayerBehaviour,
             useDrawingToolsV2: widget.useDrawingToolsV2,
             disableAnimations: widget.disableAnimations,
+            showVolume: widget.showVolume,
           ),
         ),
         if (bottomSeries?.isNotEmpty ?? false)

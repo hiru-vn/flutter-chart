@@ -145,6 +145,7 @@ class _ChartStateMobile extends _ChartState {
                   interactiveLayerBehaviour: widget.interactiveLayerBehaviour,
                   useDrawingToolsV2: widget.useDrawingToolsV2,
                   disableAnimations: widget.disableAnimations,
+                  showVolume: widget.showVolume,
                 ),
                 Align(
                   alignment: Alignment.topLeft,

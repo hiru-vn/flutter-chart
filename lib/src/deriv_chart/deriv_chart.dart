@@ -70,6 +70,7 @@ class DerivChart extends StatefulWidget {
     this.crosshairVariant = CrosshairVariant.smallScreen,
     this.interactiveLayerBehaviour,
     this.useDrawingToolsV2 = false,
+    this.showVolume = false,
     Key? key,
   }) : super(key: key);
 
@@ -202,6 +203,9 @@ class DerivChart extends StatefulWidget {
   /// If not set it will be set internally to [InteractiveLayerDesktopBehaviour]
   /// on web and [InteractiveLayerMobileBehaviour] on mobile or other platforms.
   final InteractiveLayerBehaviour? interactiveLayerBehaviour;
+
+  /// Whether to show the volume bars.
+  final bool showVolume;
 
   @override
   _DerivChartState createState() => _DerivChartState();
@@ -409,6 +413,7 @@ class _DerivChartState extends State<DerivChart> {
                 crosshairVariant: widget.crosshairVariant,
                 interactiveLayerBehaviour: _interactiveLayerBehaviour,
                 useDrawingToolsV2: widget.useDrawingToolsV2,
+                showVolume: widget.showVolume,
               ),
               if (widget.indicatorsRepo == null) _buildIndicatorsIcon(),
               if (widget.drawingToolsRepo == null) _buildDrawingToolsIcon(),

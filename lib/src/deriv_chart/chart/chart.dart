@@ -80,6 +80,7 @@ class Chart extends StatefulWidget {
     this.loadingAnimationColor,
     this.useDrawingToolsV2 = false,
     this.disableAnimations = false,
+    this.showVolume = false,
     Key? key,
   }) : super(key: key);
 
@@ -205,6 +206,9 @@ class Chart extends StatefulWidget {
 
   /// Whether to disable animations.
   final bool disableAnimations;
+
+  /// Whether to show the volume at the bottom of the chart.
+  final bool showVolume;
 
   @override
   State<StatefulWidget> createState() =>

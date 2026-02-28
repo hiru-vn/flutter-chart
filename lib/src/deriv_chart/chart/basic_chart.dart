@@ -36,6 +36,7 @@ class BasicChart extends StatefulWidget {
     this.currentTickAnimationDuration = _defaultDuration,
     this.quoteBoundsAnimationDuration = _defaultDuration,
     this.disableAnimations = false,
+    this.showVolume = false,
   })  : chartAxisConfig = chartAxisConfig ?? const ChartAxisConfig(),
         super(key: key);
 
@@ -62,6 +63,9 @@ class BasicChart extends StatefulWidget {
 
   /// Whether to disable animations.
   final bool disableAnimations;
+
+  /// Whether to show volume at the bottom of the chart.
+  final bool showVolume;
 
   @override
   BasicChartState<BasicChart> createState() => BasicChartState<BasicChart>();
@@ -517,6 +521,7 @@ class BasicChartState<T extends BasicChart> extends State<T>
             opacity: widget.opacity,
             child: CustomPaint(
               painter: ChartDataPainter(
+                showVolume: widget.showVolume,
                 animationInfo: AnimationInfo(
                   currentTickPercent: currentTickAnimation.value,
                 ),

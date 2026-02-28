@@ -17,6 +17,7 @@ class Tick with EquatableMixin implements IndicatorOHLC, IndicatorResult {
   const Tick({
     required this.epoch,
     required this.quote,
+    this.volume,
   });
 
   /// Epoch of the tick
@@ -25,6 +26,9 @@ class Tick with EquatableMixin implements IndicatorOHLC, IndicatorResult {
   /// Tick price
   @override
   final double quote;
+
+  /// Volume of the tick
+  final double? volume;
 
   @override
   double get close => quote;
@@ -39,5 +43,5 @@ class Tick with EquatableMixin implements IndicatorOHLC, IndicatorResult {
   double get open => quote;
 
   @override
-  List<Object?> get props => <Object>[epoch, quote];
+  List<Object?> get props => <Object?>[epoch, quote, volume];
 }
