@@ -7,6 +7,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/models/char
 import 'package:deriv_chart/src/models/chart_config.dart';
 import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:deriv_chart/src/theme/painting_styles/candle_style.dart';
+import 'package:deriv_chart/src/deriv_chart/chart/y_axis/y_axis_config.dart';
 import 'package:flutter/material.dart';
 
 import '../data_visualization/chart_series/line_series/line_series.dart';
@@ -64,15 +65,17 @@ class ChartDataPainter extends BaseChartDataPainter {
           candleStyle = mainSeries.style as CandleStyle;
         }
 
-        VolumePainter.paint(
-          canvas,
-          size,
-          dataSeries.visibleEntries.entries.toList(),
-          epochToCanvasX,
-          candleStyle,
-          animationInfo,
-          chartConfig,
-        );
+        YAxisConfig.instance.yAxisClipping(canvas, size, () {
+          VolumePainter.paint(
+            canvas,
+            size,
+            dataSeries.visibleEntries.entries.toList(),
+            epochToCanvasX,
+            candleStyle,
+            animationInfo,
+            chartConfig,
+          );
+        });
       }
     }
 
