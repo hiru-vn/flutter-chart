@@ -3,6 +3,7 @@ import 'package:deriv_chart/src/deriv_chart/chart/x_axis/widgets/x_axis_mobile.d
 import 'package:deriv_chart/src/deriv_chart/chart/x_axis/widgets/x_axis_web.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:deriv_chart/src/models/chart_event.dart';
 
 const Duration _defaultDuration = Duration(milliseconds: 300);
 
@@ -37,6 +38,7 @@ class XAxisWrapper extends StatelessWidget {
     this.minIntervalWidth,
     this.maxIntervalWidth,
     this.dataFitPadding,
+    this.events,
     this.scrollAnimationDuration = _defaultDuration,
     Key? key,
   }) : super(key: key);
@@ -79,6 +81,9 @@ class XAxisWrapper extends StatelessWidget {
   /// Padding around data used in data-fit mode.
   final EdgeInsets? dataFitPadding;
 
+  /// [ChartEvent]s that will be shown on the X-axis.
+  final List<ChartEvent>? events;
+
   /// Duration of the scroll animation.
   final Duration scrollAnimationDuration;
 
@@ -103,6 +108,7 @@ class XAxisWrapper extends StatelessWidget {
         dataFitPadding: dataFitPadding,
         scrollAnimationDuration: scrollAnimationDuration,
         defaultTickOffset: chartAxisConfig.defaultTickOffset,
+        events: events,
       );
     } else {
       return XAxisMobile(
@@ -120,6 +126,7 @@ class XAxisWrapper extends StatelessWidget {
         dataFitPadding: dataFitPadding,
         scrollAnimationDuration: scrollAnimationDuration,
         defaultTickOffset: chartAxisConfig.defaultTickOffset,
+        events: events,
       );
     }
   }

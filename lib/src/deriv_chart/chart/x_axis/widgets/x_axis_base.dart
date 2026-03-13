@@ -7,8 +7,11 @@ import 'package:deriv_chart/src/theme/chart_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:deriv_chart/src/models/chart_event.dart';
+
 import '../grid/x_grid_painter.dart';
 import '../x_axis_model.dart';
+import 'event_area.dart';
 
 /// X-axis base widget.
 ///
@@ -31,6 +34,7 @@ class XAxisBase extends StatefulWidget {
     this.maxIntervalWidth,
     this.dataFitPadding,
     this.defaultTickOffset,
+    this.events,
     Key? key,
   }) : super(key: key);
 
@@ -82,6 +86,9 @@ class XAxisBase extends StatefulWidget {
   /// If not specified, defaults to [maxCurrentTickOffset].
   /// The value will be clamped between 0 and [maxCurrentTickOffset].
   final double? defaultTickOffset;
+
+  /// [ChartEvent]s that will be shown on the X-axis.
+  final List<ChartEvent>? events;
 
   /// Duration of the scroll animation.
   final Duration scrollAnimationDuration;
@@ -179,6 +186,14 @@ class XAxisState extends State<XAxisBase> with TickerProviderStateMixin {
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             final ChartTheme _chartTheme = context.watch<ChartTheme>();
+            final ChartConfig _chartConfig = context.watch<ChartConfig>();
+            final bool _showEvents = _chartConfig.chartAxisConfig.showEvents &&
+                widget.events != null &&
+                widget.events!.isNotEmpty;
+            final double _bottomAreaHeight =
+                _chartTheme.gridStyle.xLabelsAreaHeight +
+                    (_showEvents ? _chartTheme.gridStyle.eventAreaHeight : 0);
+
             final double yAxisLabelsAreaWidth = (widget.entries.isNotEmpty
                     ? labelWidth(
                         widget.entries.first.quote,
@@ -212,22 +227,31 @@ class XAxisState extends State<XAxisBase> with TickerProviderStateMixin {
                             .toList(),
                         style: _chartTheme,
                         msPerPx: _model.msPerPx,
+                        bottomAreaHeight: _bottomAreaHeight,
                       ),
                     ),
                   ),
                 Padding(
                   padding: EdgeInsets.only(
-                    bottom: _chartTheme.gridStyle.xLabelsAreaHeight,
+                    bottom: _bottomAreaHeight,
                   ),
                   child: widget.child,
                 ),
+                if (_showEvents)
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: yAxisLabelsAreaWidth,
+                    height: _chartTheme.gridStyle.eventAreaHeight,
+                    child: EventArea(events: widget.events!),
+                  ),
                 Align(
                     alignment: Alignment.bottomRight,
                     child: Container(
                       width: widget.entries.isNotEmpty
                           ? yAxisLabelsAreaWidth
                           : 100,
-                      height: _chartTheme.gridStyle.xLabelsAreaHeight,
+                      height: _bottomAreaHeight,
                       color: _chartTheme.backgroundColor,
                     ))
               ],

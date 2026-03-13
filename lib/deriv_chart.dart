@@ -99,6 +99,7 @@ export 'src/deriv_chart/chart/data_visualization/markers/marker_series.dart';
 export 'src/deriv_chart/chart/data_visualization/models/animation_info.dart';
 export 'src/deriv_chart/chart/data_visualization/models/barrier_objects.dart';
 export 'src/deriv_chart/chart/data_visualization/models/chart_object.dart';
+export 'src/models/chart_event.dart';
 export 'src/deriv_chart/chart/helpers/functions/helper_functions.dart';
 export 'src/deriv_chart/chart/helpers/paint_functions/paint_line.dart';
 export 'src/deriv_chart/chart/helpers/paint_functions/paint_text.dart';

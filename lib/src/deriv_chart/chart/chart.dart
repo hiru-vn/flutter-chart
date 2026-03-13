@@ -31,6 +31,7 @@ import 'data_visualization/chart_series/data_series.dart';
 import 'data_visualization/chart_series/series.dart';
 import 'data_visualization/markers/marker_series.dart';
 import 'data_visualization/models/chart_object.dart';
+import 'package:deriv_chart/src/models/chart_event.dart';
 import 'main_chart.dart';
 
 part 'chart_state_web.dart';
@@ -63,6 +64,7 @@ class Chart extends StatefulWidget {
     this.dataFitEnabled = false,
     this.opacity = 1.0,
     this.annotations,
+    this.events,
     this.chartAxisConfig = const ChartAxisConfig(),
     this.showCrosshair = false,
     this.indicatorsRepo,
@@ -134,6 +136,9 @@ class Chart extends StatefulWidget {
 
   /// Chart's annotations
   final List<ChartAnnotation<ChartObject>>? annotations;
+
+  /// Chart's events
+  final List<ChartEvent>? events;
 
   /// Whether the chart should be showing live data or not.
   ///
@@ -346,6 +351,7 @@ abstract class _ChartState extends State<Chart> with WidgetsBindingObserver {
             maxIntervalWidth: widget.maxIntervalWidth,
             dataFitPadding: widget.dataFitPadding,
             scrollAnimationDuration: currentTickAnimationDuration,
+            events: widget.events,
             child: buildChartsLayout(context, overlaySeries, bottomSeries),
           ),
         ),

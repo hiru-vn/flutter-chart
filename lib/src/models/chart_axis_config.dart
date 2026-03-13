@@ -22,6 +22,7 @@ class ChartAxisConfig {
     this.defaultIntervalWidth = 20,
     this.showQuoteGrid = true,
     this.showEpochGrid = true,
+    this.showEvents = true,
     this.showFrame = false,
     this.smoothScrolling = true,
   });
@@ -53,6 +54,9 @@ class ChartAxisConfig {
   /// Show Epoch Grid lines and labels.
   final bool showEpochGrid;
 
+  /// Show Event icons area.
+  final bool showEvents;
+
   /// Show the chart frame and indicators dividers.
   ///
   /// Used in the mobile chart.
@@ -78,6 +82,7 @@ class ChartAxisConfig {
     double? initialBottomBoundQuote,
     double? maxCurrentTickOffset,
     double? defaultTickOffset,
+    bool? showEvents,
   }) =>
       ChartAxisConfig(
         initialTopBoundQuote: initialTopBoundQuote ?? this.initialTopBoundQuote,
@@ -85,5 +90,11 @@ class ChartAxisConfig {
             initialBottomBoundQuote ?? this.initialBottomBoundQuote,
         maxCurrentTickOffset: maxCurrentTickOffset ?? this.maxCurrentTickOffset,
         defaultTickOffset: defaultTickOffset ?? this.defaultTickOffset,
+        showEvents: showEvents ?? this.showEvents,
+        showQuoteGrid: showQuoteGrid,
+        showEpochGrid: showEpochGrid,
+        showFrame: showFrame,
+        smoothScrolling: smoothScrolling,
+        defaultIntervalWidth: defaultIntervalWidth,
       );
 }

@@ -11,6 +11,7 @@ class XGridPainter extends CustomPainter {
     required this.style,
     required this.timestamps,
     required this.msPerPx,
+    this.bottomAreaHeight,
   });
 
   /// X-coordinates of time labels.
@@ -25,6 +26,9 @@ class XGridPainter extends CustomPainter {
   /// Specifies the zoom level of the chart.
   final double msPerPx;
 
+  /// Height of the area for x-axis labels and events.
+  final double? bottomAreaHeight;
+
   @override
   void paint(Canvas canvas, Size size) {
     if (timestamps.isEmpty || xCoords.isEmpty) {
@@ -38,6 +42,7 @@ class XGridPainter extends CustomPainter {
       xCoords: xCoords,
       style: style,
       msPerPx: msPerPx,
+      bottomAreaHeight: bottomAreaHeight,
     );
   }
 

@@ -27,6 +27,7 @@ class GridStyle with EquatableMixin {
     this.labelHorizontalPadding = 8,
     this.lineThickness = 1,
     this.xLabelsAreaHeight = 24,
+    this.eventAreaHeight = 24,
   });
 
   /// The color of the grid lines.
@@ -51,6 +52,9 @@ class GridStyle with EquatableMixin {
   /// Height of the area for x-axis labels.
   final double xLabelsAreaHeight;
 
+  /// Height of the area for events icons.
+  final double eventAreaHeight;
+
   @override
   String toString() =>
       '${super.toString()}$gridLineColor, ${xLabelStyle.toStringShort()}, '
@@ -64,6 +68,7 @@ class GridStyle with EquatableMixin {
         yLabelStyle,
         labelHorizontalPadding,
         lineThickness,
-        xLabelsAreaHeight
+        xLabelsAreaHeight,
+        eventAreaHeight,
       ];
 }

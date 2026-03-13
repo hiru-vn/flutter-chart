@@ -15,6 +15,7 @@ void paintXGrid(
   required ChartTheme style,
   required List<DateTime> timestamps,
   required double msPerPx,
+  double? bottomAreaHeight,
 }) {
   assert(timestamps.length == xCoords.length);
   final GridStyle gridStyle = style.gridStyle;
@@ -27,6 +28,7 @@ void paintXGrid(
     gridStyle,
     timestamps,
     msPerPx,
+    bottomAreaHeight,
   );
 
   if (kIsWeb) {
@@ -36,6 +38,7 @@ void paintXGrid(
       xCoords: xCoords,
       gridStyle: gridStyle,
       timestamps: timestamps,
+      bottomAreaHeight: bottomAreaHeight,
     );
   } else {
     _paintTimeLabels(
@@ -44,6 +47,7 @@ void paintXGrid(
       xCoords: xCoords,
       gridStyle: gridStyle,
       timestamps: timestamps,
+      bottomAreaHeight: bottomAreaHeight,
     );
   }
 }
@@ -56,6 +60,7 @@ void _paintTimeGridLines(
   GridStyle gridStyle,
   List<DateTime> time,
   double msPerPx,
+  double? bottomAreaHeight,
 ) {
   final Paint normalGridPaint = Paint()
     ..color = gridStyle.gridLineColor
@@ -71,7 +76,8 @@ void _paintTimeGridLines(
     YAxisConfig.instance.yAxisClipping(canvas, size, () {
       canvas.drawLine(
         Offset(xCoords[i], 0),
-        Offset(xCoords[i], size.height - gridStyle.xLabelsAreaHeight),
+        Offset(xCoords[i],
+            size.height - (bottomAreaHeight ?? gridStyle.xLabelsAreaHeight)),
         // checking if msPerPx is <  300000
         (msPerPx < 300000 && checkNewDate(time[i]))
             ? verticalBarrierPaint
@@ -87,14 +93,20 @@ void _paintTimeLabels(
   required List<double> xCoords,
   required GridStyle gridStyle,
   required List<DateTime> timestamps,
+  double? bottomAreaHeight,
 }) {
+  final double totalBottomHeight =
+      bottomAreaHeight ?? gridStyle.xLabelsAreaHeight;
+  final double labelYAnchor =
+      size.height - totalBottomHeight + gridStyle.xLabelsAreaHeight / 2;
+
   for (int index = 0; index < timestamps.length; index++) {
     paintText(
       canvas,
       text: timeLabel(timestamps[index]),
       anchor: Offset(
         xCoords[index],
-        size.height - gridStyle.xLabelsAreaHeight / 2,
+        labelYAnchor,
       ),
       style: gridStyle.xLabelStyle,
     );
@@ -107,7 +119,13 @@ void _paintTimeLabelsWeb(
   required List<double> xCoords,
   required GridStyle gridStyle,
   required List<DateTime> timestamps,
+  double? bottomAreaHeight,
 }) {
+  final double totalBottomHeight =
+      bottomAreaHeight ?? gridStyle.xLabelsAreaHeight;
+  final double labelYAnchor =
+      size.height - totalBottomHeight + gridStyle.xLabelsAreaHeight / 2;
+
   final TextStyle textStyle = TextStyle(
     fontSize: gridStyle.xLabelStyle.fontSize,
     height: gridStyle.xLabelStyle.height,
@@ -120,7 +138,7 @@ void _paintTimeLabelsWeb(
       text: timeLabel(timestamps[index]),
       anchor: Offset(
         xCoords[index],
-        size.height - gridStyle.xLabelsAreaHeight / 2,
+        labelYAnchor,
       ),
       style: textStyle,
     );
