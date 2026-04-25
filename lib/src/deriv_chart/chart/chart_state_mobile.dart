@@ -35,7 +35,7 @@ class _ChartStateMobile extends _ChartState {
         widget.quoteBoundsAnimationDuration ?? _defaultDuration;
 
     List<Widget> getBottomIndicatorsList(BuildContext context) =>
-        widget.indicatorsRepo!.items
+        (widget.indicatorsRepo?.items ?? <IndicatorConfig>[])
             .mapIndexed((int index, IndicatorConfig config) {
           if (config.isOverlay) {
             return const SizedBox.shrink();
