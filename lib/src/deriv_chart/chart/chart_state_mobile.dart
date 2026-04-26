@@ -129,7 +129,7 @@ class _ChartStateMobile extends _ChartState {
                   showDataFitButton:
                       widget.showDataFitButton ?? widget.dataFitEnabled,
                   showScrollToLastTickButton:
-                      widget.showScrollToLastTickButton ?? true,
+                      widget.showScrollToLastTickButton ?? false,
                   opacity: widget.opacity,
                   chartAxisConfig: widget.chartAxisConfig,
                   verticalPaddingFraction: widget.verticalPaddingFraction,
@@ -212,10 +212,13 @@ class _ChartStateMobile extends _ChartState {
 
   bool get _isAllBottomIndicatorsHidden {
     bool isAllHidden = true;
-    for (int i = 0; i < widget.indicatorsRepo!.items.length; i++) {
-      if (!widget.indicatorsRepo!.items[i].isOverlay &&
-          !(widget.indicatorsRepo?.getHiddenStatus(i) ?? false)) {
-        isAllHidden = false;
+    final items = widget.indicatorsRepo?.items;
+    if (items != null) {
+      for (int i = 0; i < items.length; i++) {
+        if (!items[i].isOverlay &&
+            !(widget.indicatorsRepo?.getHiddenStatus(i) ?? false)) {
+          isAllHidden = false;
+        }
       }
     }
     return isAllHidden;
@@ -223,9 +226,10 @@ class _ChartStateMobile extends _ChartState {
 
   Widget _buildOverlayIndicatorsLabels() {
     final List<Widget> overlayIndicatorsLabels = <Widget>[];
-    if (widget.indicatorsRepo != null) {
-      for (int i = 0; i < widget.indicatorsRepo!.items.length; i++) {
-        final IndicatorConfig config = widget.indicatorsRepo!.items[i];
+    final items = widget.indicatorsRepo?.items;
+    if (items != null) {
+      for (int i = 0; i < items.length; i++) {
+        final IndicatorConfig config = items[i];
         if (!config.isOverlay) {
           continue;
         }

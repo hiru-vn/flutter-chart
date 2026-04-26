@@ -34,7 +34,7 @@ class _ChartStateWeb extends _ChartState {
             showDataFitButton:
                 widget.showDataFitButton ?? widget.dataFitEnabled,
             showScrollToLastTickButton:
-                widget.showScrollToLastTickButton ?? true,
+                widget.showScrollToLastTickButton ?? false,
             opacity: widget.opacity,
             chartAxisConfig: widget.chartAxisConfig,
             verticalPaddingFraction: widget.verticalPaddingFraction,
